@@ -6,14 +6,15 @@ Class Library.Book Extends %Persistent
 	Property Friend As Library.Person;
 	
 	
-	ClassMethod AddBook(title As %String, author As %String, genre As %String = "No genre" ) As Library.Book
+	ClassMethod AddBook(title As %String, author As %String, genre As %String = "No genre" ) As %Status
 	{
 		
 		set book = ##class(Library.Book).%New()
 		set book.Title = title
 		set book.Author = author
 		set book.Genre = genre 
-		return book
+		set status = book.%Save()
+		return status
 	}
 	
 Storage Default
