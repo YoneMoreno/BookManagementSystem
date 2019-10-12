@@ -51,6 +51,25 @@ Class Library.Book Extends %Persistent
 	}
 	
 	
+	ClassMethod LoanBook(idBook As %Integer, idFriend As %String) As %Status
+	{
+		
+		set status = ##class(Library.Book).%ExistsId(idBook)
+		if status = 1{
+			set book = ##class(Library.Book).%OpenId(idBook)
+			set statusFriend = ##class(Library.Person).%ExistsId(idFriend)
+			if statusFriend = 1{
+				set friend = ##class(Library.Person).%OpenId(idFriend)
+				set book.Friend = friend
+				w !,"Book: "_book.Title_" loaned to: "_book.Friend.Name
+				set result = book.%Save()
+			}
+		}
+		return result
+		
+	}
+	
+	
 	
 Storage Default
 {
