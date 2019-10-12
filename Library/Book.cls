@@ -23,8 +23,8 @@ Class Library.Book Extends %Persistent
 		set status = ##class(Library.Book).%ExistsId(id)
 		if status = 1{
 			set book = ##class(Library.Book).%OpenId(id)
-			w !,"Title",?$X+20,"Author",?$X+20,"Genre"
-			w !,book.Title,?$X+20,book.Author,?$X+20,book.Genre
+			w !,"ID",?$X+10,"Title",?$X+10,"Author",?$X+10,"Genre"
+			w !,id,?$X+10,book.Title,?$X+10,book.Author,?$X+10,book.Genre
 			
 		}else{
 			w !,"Error, there is not a book with id: "_id
@@ -40,10 +40,10 @@ Class Library.Book Extends %Persistent
 			set status = ##class(Library.Book).%ExistsId(i)
 			if status = 1{
 				if i = 1 {
-					w !,"Title",?$X+20,"Author",?$X+20,"Genre"
+					w !,"ID",?$X+10,"Title",?$X+10,"Author",?$X+10,"Genre"
 				}
 				set book = ##class(Library.Book).%OpenId(i)
-				w !,book.Title,?$X+20,book.Author,?$X+20,book.Genre
+				w !,i,?$X+10,book.Title,?$X+10,book.Author,?$X+10,book.Genre
 			}
 			set i = i + 1
 		} while (status = 1)
