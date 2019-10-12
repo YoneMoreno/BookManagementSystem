@@ -32,6 +32,26 @@ Class Library.Book Extends %Persistent
 		return status
 	}
 	
+	ClassMethod PrintAll() As %Status
+	{
+		set i = 1
+		set status = 0
+		do {
+			set status = ##class(Library.Book).%ExistsId(i)
+			if status = 1{
+				if i = 1 {
+					w !,"Title",?$X+20,"Author",?$X+20,"Genre"
+				}
+				set book = ##class(Library.Book).%OpenId(i)
+				w !,book.Title,?$X+20,book.Author,?$X+20,book.Genre
+			}
+			set i = i + 1
+		} while (status = 1)
+		return status
+	}
+	
+	
+	
 Storage Default
 {
 <Data name="BookDefaultData">
