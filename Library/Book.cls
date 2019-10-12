@@ -17,6 +17,21 @@ Class Library.Book Extends %Persistent
 		return status
 	}
 	
+	
+	ClassMethod PrintOne(id As %Integer) As %Status
+	{
+		set status = ##class(Library.Book).%ExistsId(id)
+		if status = 1{
+			set book = ##class(Library.Book).%OpenId(id)
+			w !,"Title",?$X+20,"Author",?$X+20,"Genre"
+			w !,book.Title,?$X+20,book.Author,?$X+20,book.Genre
+			
+		}else{
+			w !,"Error, there is not a book with id: "_id
+		}
+		return status
+	}
+	
 Storage Default
 {
 <Data name="BookDefaultData">
