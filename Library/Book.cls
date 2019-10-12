@@ -69,6 +69,20 @@ Class Library.Book Extends %Persistent
 		
 	}
 	
+		ClassMethod ReturnBook(idBook As %Integer) As %Status
+	{
+		
+		set status = ##class(Library.Book).%ExistsId(idBook)
+		if status = 1{
+			set book = ##class(Library.Book).%OpenId(idBook)
+			set book.Friend = ""
+			w !,"Book: "_book.Title_" has been returned!"
+			set result = book.%Save()
+			return result
+		}
+		return status
+	}
+	
 	
 	
 Storage Default
