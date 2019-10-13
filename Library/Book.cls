@@ -23,8 +23,8 @@ Class Library.Book Extends %Persistent
 		set status = ##class(Library.Book).%ExistsId(id)
 		if status = 1{
 			set book = ##class(Library.Book).%OpenId(id)
-			w !,"ID",?$X+10,"Title",?$X+10,"Author",?$X+10,"Genre"
-			w !,id,?$X+10,book.Title,?$X+10,book.Author,?$X+10,book.Genre
+			w !,"ID",?$X+10,"Title",?$X+10,"Author",?$X+10,"Genre",?$X+10,"Friend"
+			w !,id,?$X+10,book.Title,?$X+10,book.Author,?$X+10,book.Genre,?$X+10,book.Friend.Name
 			
 		}else{
 			w !,"Error, there is not a book with id: "_id
@@ -40,10 +40,10 @@ Class Library.Book Extends %Persistent
 			set status = ##class(Library.Book).%ExistsId(i)
 			if status = 1{
 				if i = 1 {
-					w !,"ID",?$X+10,"Title",?$X+10,"Author",?$X+10,"Genre"
+					w !,"ID",?$X+10,"Title",?$X+10,"Author",?$X+10,"Genre",?$X+10,"Friend"
 				}
 				set book = ##class(Library.Book).%OpenId(i)
-				w !,i,?$X+10,book.Title,?$X+10,book.Author,?$X+10,book.Genre
+				w !,i,?$X+10,book.Title,?$X+10,book.Author,?$X+10,book.Genre,?$X+10,book.Friend.Name
 			}
 			set i = i + 1
 		} while (status = 1)
@@ -83,6 +83,25 @@ Class Library.Book Extends %Persistent
 		return status
 	}
 	
+	
+	ClassMethod GetLoanedBooks() As %ArrayOfObjects
+	{
+		set i = 1
+		set books = ""
+		do {
+			
+			set status = ##class(Library.Book).%ExistsId(i)
+			if status = 1{
+				set book = ##class(Library.Book).%OpenId(i)
+				w !,book.Friend.Name
+				if book.Friend.Name '= ""{			
+					set books(i) = book
+				}
+			}
+			set i = i + 1
+		} while status = 1
+		return books
+	}
 	
 	
 Storage Default
