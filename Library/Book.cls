@@ -84,25 +84,38 @@ Class Library.Book Extends %Persistent
 	}
 	
 	
-	ClassMethod GetLoanedBooks() As %ArrayOfObjects
+	Query BooksLoaned() As %SQLQuery
 	{
-		set i = 1
-		set books = ""
-		do {
-			
-			set status = ##class(Library.Book).%ExistsId(i)
-			if status = 1{
-				set book = ##class(Library.Book).%OpenId(i)
-				w !,book.Friend.Name
-				if book.Friend.Name '= ""{			
-					set books(i) = book
-				}
-			}
-			set i = i + 1
-		} while status = 1
-		return books
+		SELECT * 
+		FROM Library.Book
+		WHERE Friend IS NOT NULL
 	}
 	
+	
+	ClassMethod GetLoanedBooks() As %ArrayOfObjects
+	{
+		set booksRS = ##class(%ResultSet).%New("Library.Book,BooksLoaned")
+		set rsStatus = booksRS.Execute()
+		set i = 1
+		set books = ""
+		if rsStatus = $$$OK {
+			while booksRS.Next() {
+				set book = ##class(Library.Book).%New()
+				set book.Title = booksRS.Get("Title")
+				set book.Author = booksRS.Get("Author")
+				set book.Genre = booksRS.Get("Genre")
+				set dbFriend = ##class(Library.Person).%OpenId(booksRS.Get("Friend"))
+				set book.Friend = dbFriend
+				set books(i) = book
+				set i = i + 1
+			}
+		}else{
+			w !,"Error fetching books in GetoanedBooks()"
+		}
+		do booksRS.Close()
+		return books
+	}
+
 	
 Storage Default
 {
